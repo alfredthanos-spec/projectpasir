@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Pasir</title>
-    
 
 <style>
 body {
@@ -72,8 +71,10 @@ button {
     cursor: pointer;
 }
 
-button:active {
-    opacity: 0.8;
+.week-info {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
 }
 
 .result {
@@ -105,7 +106,8 @@ button:active {
 
     <div class="card">
         <div class="title">Tanggal</div>
-        <input type="date" id="tanggal">
+        <input type="date" id="tanggal" onchange="updateMinggu()">
+        <div class="week-info" id="mingguInfo"></div>
     </div>
 </div>
 
@@ -150,12 +152,32 @@ button:active {
 let qtyPasir = 0;
 let qtyTanah = 0;
 
-// Otomatis isi tanggal hari ini
 window.onload = function() {
     let today = new Date().toISOString().split("T")[0];
     document.getElementById("tanggal").value = today;
+    updateMinggu();
     hitung();
 };
+
+function updateMinggu(){
+    let tanggalValue = document.getElementById("tanggal").value;
+    let date = new Date(tanggalValue);
+    let day = date.getDate();
+
+    let minggu;
+
+    if (day <= 7) {
+        minggu = 1;
+    } else if (day <= 14) {
+        minggu = 2;
+    } else if (day <= 21) {
+        minggu = 3;
+    } else {
+        minggu = 4;
+    }
+
+    document.getElementById("mingguInfo").innerText = "Minggu ke-" + minggu;
+}
 
 function tambah(jenis){
     if(jenis === 'pasir'){
