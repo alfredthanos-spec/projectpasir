@@ -1,170 +1,194 @@
 <!DOCTYPE html>
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Retase Harian</title>
+<title>Project Pasir</title>
 
 <style>
-body { font-family: Arial; background:#f2f2f2; padding:15px; }
-h1 { text-align:center; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f2f4f7;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
 .container {
-display:flex;
-gap:15px;
-flex-wrap:wrap;
+    max-width: 600px;
+    margin: auto;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
 }
 
 .card {
-background:white;
-padding:15px;
-border-radius:15px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-flex:1;
-min-width:280px;
+    background: white;
+    padding: 15px;
+    border-radius: 14px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #555;
 }
 
 input {
-padding:8px;
-margin:5px 0;
-border-radius:8px;
-border:1px solid #ccc;
-width:100%;
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
-.ret-box {
-display:flex;
-align-items:center;
-justify-content:center;
-margin-top:15px;
-gap:15px;
+.counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+    font-size: 20px;
 }
 
-.ret-number {
-font-size:28px;
-font-weight:bold;
-min-width:40px;
-text-align:center;
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: #ff8c00;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.btn-minus {
-background:#e53935;
-color:white;
-font-size:22px;
-width:60px;
-height:50px;
-border:none;
-border-radius:12px;
-}
-
-.btn-plus {
-background:#43a047;
-color:white;
-font-size:22px;
-width:60px;
-height:50px;
-border:none;
-border-radius:12px;
+button:active {
+    opacity: 0.8;
 }
 
 .result {
-margin-top:20px;
-font-size:18px;
-font-weight:bold;
-background:white;
-padding:15px;
-border-radius:15px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.total-box {
+    font-size: 18px;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Rekap Retase Harian</h1>
-
-<div id="infoTanggal" style="text-align:center; margin-bottom:15px;"></div>
+<h1>🚛 PROJECT PASIR</h1>
 
 <div class="container">
 
+<div class="grid-2">
+    <div class="card">
+        <div class="title">Harga per Ret</div>
+        Pasir:
+        <input type="number" id="hargaPasir">
+        Tanah:
+        <input type="number" id="hargaTanah">
+    </div>
+
+    <div class="card">
+        <div class="title">Tanggal</div>
+        <input type="date" id="tanggal">
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="card">
+        <div class="title">PASIR</div>
+        <div class="counter">
+            <button onclick="kurang('pasir')">−</button>
+            <span id="qtyPasir">0</span>
+            <button onclick="tambah('pasir')">+</button>
+        </div>
+        Komisi per Ret:
+        <input type="number" id="komisiPasir">
+    </div>
+
+    <div class="card">
+        <div class="title">TANAH</div>
+        <div class="counter">
+            <button onclick="kurang('tanah')">−</button>
+            <span id="qtyTanah">0</span>
+            <button onclick="tambah('tanah')">+</button>
+        </div>
+        Komisi per Ret:
+        <input type="number" id="komisiTanah">
+    </div>
+</div>
+
 <div class="card">
-<h2>Pasir</h2>
-
-<label>Harga per Ret</label>
-<input type="number" id="hargaPasir" value="1200000" oninput="hitung()">
-
-<label>Komisi per Ret</label>
-<input type="number" id="komisiPasir" value="0" oninput="hitung()">
-
-<div class="ret-box">
-<button class="btn-minus" onclick="ubahRet('pasir',-1)">−</button>
-<div class="ret-number" id="retPasir">0</div>
-<button class="btn-plus" onclick="ubahRet('pasir',1)">+</button>
+    <div class="title">Ringkasan</div>
+    <div class="result">
+        Omset: <span id="omset">Rp 0</span><br>
+        Total Komisi: <span id="totalKomisi">Rp 0</span><br>
+        <div class="total-box">
+            Sisa Bersih: <span id="sisa">Rp 0</span>
+        </div>
+    </div>
+    <br>
+    <button onclick="hitung()">Hitung</button>
 </div>
 
 </div>
-
-<div class="card">
-<h2>Tanah</h2>
-
-<label>Harga per Ret</label>
-<input type="number" id="hargaTanah" value="900000" oninput="hitung()">
-
-<label>Komisi per Ret</label>
-<input type="number" id="komisiTanah" value="0" oninput="hitung()">
-
-<div class="ret-box">
-<button class="btn-minus" onclick="ubahRet('tanah',-1)">−</button>
-<div class="ret-number" id="retTanah">0</div>
-<button class="btn-plus" onclick="ubahRet('tanah',1)">+</button>
-</div>
-
-</div>
-
-</div>
-
-<div class="result" id="hasil"></div>
 
 <script>
-let retPasir = 0;
-let retTanah = 0;
+let qtyPasir = 0;
+let qtyTanah = 0;
 
-function ubahRet(jenis, nilai){
-if(jenis === 'pasir'){
-retPasir = Math.max(0, retPasir + nilai);
-document.getElementById("retPasir").innerText = retPasir;
+function tambah(jenis){
+    if(jenis === 'pasir'){
+        qtyPasir++;
+        document.getElementById("qtyPasir").innerText = qtyPasir;
+    } else {
+        qtyTanah++;
+        document.getElementById("qtyTanah").innerText = qtyTanah;
+    }
 }
-if(jenis === 'tanah'){
-retTanah = Math.max(0, retTanah + nilai);
-document.getElementById("retTanah").innerText = retTanah;
+
+function kurang(jenis){
+    if(jenis === 'pasir' && qtyPasir > 0){
+        qtyPasir--;
+        document.getElementById("qtyPasir").innerText = qtyPasir;
+    }
+    if(jenis === 'tanah' && qtyTanah > 0){
+        qtyTanah--;
+        document.getElementById("qtyTanah").innerText = qtyTanah;
+    }
 }
-hitung();
+
+function formatRupiah(angka){
+    return "Rp " + angka.toLocaleString("id-ID");
 }
 
 function hitung(){
-let hargaPasir = parseFloat(document.getElementById("hargaPasir").value) || 0;
-let hargaTanah = parseFloat(document.getElementById("hargaTanah").value) || 0;
-let komisiPasir = parseFloat(document.getElementById("komisiPasir").value) || 0;
-let komisiTanah = parseFloat(document.getElementById("komisiTanah").value) || 0;
+    let hargaPasir = parseInt(document.getElementById("hargaPasir").value) || 0;
+    let hargaTanah = parseInt(document.getElementById("hargaTanah").value) || 0;
+    let komisiPasir = parseInt(document.getElementById("komisiPasir").value) || 0;
+    let komisiTanah = parseInt(document.getElementById("komisiTanah").value) || 0;
 
-let omzetPasir = retPasir * hargaPasir;
-let omzetTanah = retTanah * hargaTanah;
+    let omset = (qtyPasir * hargaPasir) + (qtyTanah * hargaTanah);
+    let totalKomisi = (qtyPasir * komisiPasir) + (qtyTanah * komisiTanah);
+    let sisa = omset - totalKomisi;
 
-let totalKomisi = (retPasir * komisiPasir) + (retTanah * komisiTanah);
-let totalOmzet = omzetPasir + omzetTanah;
-
-let today = new Date();
-let tanggal = today.toLocaleDateString("id-ID");
-let minggu = Math.ceil(today.getDate() / 7);
-
-document.getElementById("hasil").innerHTML =
-"Tanggal: " + tanggal + " (Minggu ke-" + minggu + ")<br>" +
-"Total Pasir: Rp " + omzetPasir.toLocaleString("id-ID") + "<br>" +
-"Total Tanah: Rp " + omzetTanah.toLocaleString("id-ID") + "<br>" +
-"Total Komisi: Rp " + totalKomisi.toLocaleString("id-ID") + "<br><br>" +
-"TOTAL OMZET: Rp " + totalOmzet.toLocaleString("id-ID");
+    document.getElementById("omset").innerText = formatRupiah(omset);
+    document.getElementById("totalKomisi").innerText = formatRupiah(totalKomisi);
+    document.getElementById("sisa").innerText = formatRupiah(sisa);
 }
-
-hitung();
 </script>
 
 </body>
