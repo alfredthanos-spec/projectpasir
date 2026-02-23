@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retase Harian</title>
+
+<style>
+body { font-family: Arial; background:#f2f2f2; padding:15px; }
+h1 { text-align:center; }
+
+.container {
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.card {
+background:white;
+padding:15px;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+flex:1;
+min-width:280px;
+}
+
+input {
+padding:8px;
+margin:5px 0;
+border-radius:8px;
+border:1px solid #ccc;
+width:100%;
+}
+
+.ret-box {
+display:flex;
+align-items:center;
+justify-content:center;
+margin-top:15px;
+gap:15px;
+}
+
+.ret-number {
+font-size:28px;
+font-weight:bold;
+min-width:40px;
+text-align:center;
+}
+
+.btn-minus {
+background:#e53935;
+color:white;
+font-size:22px;
+width:60px;
+height:50px;
+border:none;
+border-radius:12px;
+}
+
+.btn-plus {
+background:#43a047;
+color:white;
+font-size:22px;
+width:60px;
+height:50px;
+border:none;
+border-radius:12px;
+}
+
+.result {
+margin-top:20px;
+font-size:18px;
+font-weight:bold;
+background:white;
+padding:15px;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+
+<body>
+
+<h1>Rekap Retase Harian</h1>
+
+<div id="infoTanggal" style="text-align:center; margin-bottom:15px;"></div>
+
+<div class="container">
+
+<div class="card">
+<h2>Pasir</h2>
+
+<label>Harga per Ret</label>
+<input type="number" id="hargaPasir" value="1200000" oninput="hitung()">
+
+<label>Komisi per Ret</label>
+<input type="number" id="komisiPasir" value="0" oninput="hitung()">
+
+<div class="ret-box">
+<button class="btn-minus" onclick="ubahRet('pasir',-1)">−</button>
+<div class="ret-number" id="retPasir">0</div>
+<button class="btn-plus" onclick="ubahRet('pasir',1)">+</button>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Tanah</h2>
+
+<label>Harga per Ret</label>
+<input type="number" id="hargaTanah" value="900000" oninput="hitung()">
+
+<label>Komisi per Ret</label>
+<input type="number" id="komisiTanah" value="0" oninput="hitung()">
+
+<div class="ret-box">
+<button class="btn-minus" onclick="ubahRet('tanah',-1)">−</button>
+<div class="ret-number" id="retTanah">0</div>
+<button class="btn-plus" onclick="ubahRet('tanah',1)">+</button>
+</div>
+
+</div>
+
+</div>
+
+<div class="result" id="hasil"></div>
+
+<script>
+let retPasir = 0;
+let retTanah = 0;
+
+function ubahRet(jenis, nilai){
+if(jenis === 'pasir'){
+retPasir = Math.max(0, retPasir + nilai);
+document.getElementById("retPasir").innerText = retPasir;
+}
+if(jenis === 'tanah'){
+retTanah = Math.max(0, retTanah + nilai);
+document.getElementById("retTanah").innerText = retTanah;
+}
+hitung();
+}
+
+function hitung(){
+let hargaPasir = parseFloat(document.getElementById("hargaPasir").value) || 0;
+let hargaTanah = parseFloat(document.getElementById("hargaTanah").value) || 0;
+let komisiPasir = parseFloat(document.getElementById("komisiPasir").value) || 0;
+let komisiTanah = parseFloat(document.getElementById("komisiTanah").value) || 0;
+
+let omzetPasir = retPasir * hargaPasir;
+let omzetTanah = retTanah * hargaTanah;
+
+let totalKomisi = (retPasir * komisiPasir) + (retTanah * komisiTanah);
+let totalOmzet = omzetPasir + omzetTanah;
+
+let today = new Date();
+let tanggal = today.toLocaleDateString("id-ID");
+let minggu = Math.ceil(today.getDate() / 7);
+
+document.getElementById("hasil").innerHTML =
+"Tanggal: " + tanggal + " (Minggu ke-" + minggu + ")<br>" +
+"Total Pasir: Rp " + omzetPasir.toLocaleString("id-ID") + "<br>" +
+"Total Tanah: Rp " + omzetTanah.toLocaleString("id-ID") + "<br>" +
+"Total Komisi: Rp " + totalKomisi.toLocaleString("id-ID") + "<br><br>" +
+"TOTAL OMZET: Rp " + totalOmzet.toLocaleString("id-ID");
+}
+
+hitung();
+</script>
+
+</body>
+</html>
