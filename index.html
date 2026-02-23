@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Pasir</title>
-
+    
 <style>
 body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -96,9 +97,9 @@ button:active {
     <div class="card">
         <div class="title">Harga per Ret</div>
         Pasir:
-        <input type="number" id="hargaPasir">
+        <input type="number" id="hargaPasir" oninput="hitung()">
         Tanah:
-        <input type="number" id="hargaTanah">
+        <input type="number" id="hargaTanah" oninput="hitung()">
     </div>
 
     <div class="card">
@@ -116,7 +117,7 @@ button:active {
             <button onclick="tambah('pasir')">+</button>
         </div>
         Komisi per Ret:
-        <input type="number" id="komisiPasir">
+        <input type="number" id="komisiPasir" oninput="hitung()">
     </div>
 
     <div class="card">
@@ -127,7 +128,7 @@ button:active {
             <button onclick="tambah('tanah')">+</button>
         </div>
         Komisi per Ret:
-        <input type="number" id="komisiTanah">
+        <input type="number" id="komisiTanah" oninput="hitung()">
     </div>
 </div>
 
@@ -140,8 +141,6 @@ button:active {
             Sisa Bersih: <span id="sisa">Rp 0</span>
         </div>
     </div>
-    <br>
-    <button onclick="hitung()">Hitung</button>
 </div>
 
 </div>
@@ -149,6 +148,13 @@ button:active {
 <script>
 let qtyPasir = 0;
 let qtyTanah = 0;
+
+// Otomatis isi tanggal hari ini
+window.onload = function() {
+    let today = new Date().toISOString().split("T")[0];
+    document.getElementById("tanggal").value = today;
+    hitung();
+};
 
 function tambah(jenis){
     if(jenis === 'pasir'){
@@ -158,6 +164,7 @@ function tambah(jenis){
         qtyTanah++;
         document.getElementById("qtyTanah").innerText = qtyTanah;
     }
+    hitung();
 }
 
 function kurang(jenis){
@@ -169,6 +176,7 @@ function kurang(jenis){
         qtyTanah--;
         document.getElementById("qtyTanah").innerText = qtyTanah;
     }
+    hitung();
 }
 
 function formatRupiah(angka){
